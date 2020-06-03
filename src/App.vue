@@ -11,8 +11,11 @@
           <p>{{user.username}}</p>
           <button @click="removeUser(user)">x</button>
         </div>
+        <button @click="fetchTweets()">Save</button>
       </section>
     </aside>
+    <main v-if="!empty">{{tweetData}}</main>
+    <main v-else>Please follow some people</main>
   </div>
 </template>
 
@@ -22,13 +25,19 @@ export default {
   data() {
     return {
       usernames: [],
-      newUser: ""
+      newUser: "",
+      tweetData: "",
+      empty: false
     };
   },
   mounted() {
-    if (localStorage.getItem("saved-users").length > 0) {
+    let vm = this;
+    if (localStorage.getItem("saved-users").length > 2) {
       this.usernames = JSON.parse(localStorage.getItem("saved-users"));
+      vm.fetchTweets()
     }
+
+    this.fetchTweets();
   },
   methods: {
     addUser: function(event) {
@@ -40,9 +49,25 @@ export default {
       localStorage.setItem("saved-users", JSON.stringify(this.usernames));
       this.newUser = "";
     },
-    removeUser: function(user){
+    removeUser: function(user) {
       this.usernames.splice(this.usernames.indexOf(user), 1);
       localStorage.setItem("saved-users", JSON.stringify(this.usernames));
+    },
+    fetchTweets: function() {
+      let userlist = "";
+      let vm = this;
+      for (let i in vm.usernames) {
+        userlist = userlist + vm.usernames[i].username + ",";
+      }
+      userlist = userlist.slice(0, -1);
+      let reqUrl = "http://127.0.0.1:5000/tweets?u=" + userlist;
+      if (userlist.length > 0) {
+        fetch(reqUrl)
+          .then(response => response.json())
+          .then(json => (vm.tweetData = json));
+      } else {
+        vm.empty = true
+      }
     }
   }
 };
