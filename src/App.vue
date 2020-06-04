@@ -19,7 +19,7 @@
       <div class="header">
         <h2>Following List</h2>
         <label for="save"></label>
-        <input type="image" @click="saveList()" src="./src/assets/close-l.svg" alt="close panel" name="save"/>
+        <input type="image" @click="saveList()" src="./src/assets/close-l.svg" alt="close panel" id="save"/>
       </div>
       <div class="divider" />
       <form @submit.prevent="addUser()">
@@ -40,7 +40,7 @@
                 type="image"
                 src="./src/assets/close-s.svg"
                 alt="delete user from list"
-                name="close"
+                id="close"
                 @click="removeUser(user)"
               />
             </span>
