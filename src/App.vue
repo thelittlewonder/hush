@@ -7,7 +7,7 @@
         <img src="./assets/baselogo.svg" alt="Hush Logo" />
       </picture>
       <div class="divider" />
-      <h1>Follow tweets of your favourite people on internet, without any noise.</h1>
+      <h1>Follow tweets of your favourite people on internet without any noise.</h1>
       <button class="primary" @click="navState='visible'">Edit List</button>
       <div class="divider" />
       <a href="https://twitter.com/lilwonderspeaks" target="_blank" rel="noreferrer noopener">
@@ -24,7 +24,7 @@
       <form @submit.prevent="addUser()">
         <label for="username">Enter Twitter username</label>
         <span>
-          <input autofocus type="text" name="username" placeholder="naval" v-model="newUser" />
+          <input autofocus type="text" name="username" placeholder="eg. naval" v-model="newUser" />
           <button type="submit">→</button>
         </span>
       </form>
@@ -47,7 +47,7 @@
     </nav>
     <main>
       <transition name="fade">
-        <section v-if="!loader" transition="expand">
+        <section v-if="!loader">
           <article v-for="tweet in tweetData" :key="tweet.username">
             <p>{{tweet.content}}</p>
             <span class="info">
@@ -59,7 +59,16 @@
         </section>
       </transition>
       <transition name="fade">
-        <div class="loader" v-if="loader" transition="expand">
+        <div class="emp-st" v-if="empty">
+          <h3>You are not following anyone.</h3>
+          <p>
+            Please
+            <span @click="navState='visible'">follow some people</span> to generate your feed
+          </p>
+        </div>
+      </transition>
+      <transition name="fade">
+        <div class="loader" v-if="loader">
           <span class="ld-text"></span>
         </div>
       </transition>
@@ -73,7 +82,20 @@ export default {
   name: "app",
   data() {
     return {
-      usernames: [],
+      usernames: [
+        {
+          id: "001",
+          username: "naval"
+        },
+        {
+          id: "002",
+          username: "jamesclear"
+        },
+        {
+          id: "003",
+          username: "orangebook_"
+        }
+      ],
       newUser: "",
       tweetData: "",
       didUpdate: false,
@@ -84,10 +106,14 @@ export default {
   },
   mounted() {
     let vm = this;
-    if (localStorage.getItem("saved-users").length > 2) {
-      this.usernames = JSON.parse(localStorage.getItem("saved-users"));
-      vm.fetchTweets();
+    if (localStorage.getItem("saved-users") == null) {
+      localStorage.setItem("saved-users", "");
     }
+    if (localStorage.getItem("saved-users").length > 2) {
+      vm.empty = false;
+      this.usernames = JSON.parse(localStorage.getItem("saved-users"));
+    }
+    vm.fetchTweets();
   },
   methods: {
     addUser: function(event) {
@@ -119,7 +145,7 @@ export default {
         userlist = userlist + vm.usernames[i].username + ",";
       }
       userlist = userlist.slice(0, -1);
-      let reqUrl = "http://127.0.0.1:5000/tweets?u=" + userlist;
+      let reqUrl = "https://hshapi.herokuapp.com/tweets?u=" + userlist;
       if (userlist.length > 0) {
         fetch(reqUrl)
           .then(response => response.json())
@@ -129,13 +155,18 @@ export default {
             this.didUpdate = false;
             console.log("finished loading");
           });
-      } else {
       }
     },
     saveList: function() {
       let vm = this;
       if (this.didUpdate) {
-        vm.fetchTweets();
+        if (localStorage.getItem("saved-users").length > 2) {
+          vm.empty = false;
+          vm.fetchTweets();
+        } else {
+          vm.empty = true;
+          vm.loader = false;
+        }
       }
       vm.navState = "hidden";
     }
@@ -496,6 +527,23 @@ main {
   }
 }
 
+.emp-st {
+  color: #fff;
+  h3 {
+    font-size: 0.875em;
+    opacity: 0.6;
+  }
+  p {
+    font-size: 0.75em;
+    margin-top: 12px;
+    opacity: 0.4;
+    span {
+      cursor: pointer;
+      color: #d1c1a8;
+      text-decoration: underline dotted;
+    }
+  }
+}
 @keyframes blink {
   0%,
   100% {
