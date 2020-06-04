@@ -1,8 +1,8 @@
 {
-  "name": "hush",
+  "name": "Hush",
   "version": "1.0.0",
   "private": true,
-  "description": "A Vue.js project",
+  "description": "Follow your favorite tweets without any noise",
   "author": "Abhishek Sharma <hello.abhishek@outlook.com>",
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
