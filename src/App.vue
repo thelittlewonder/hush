@@ -18,7 +18,7 @@
     <nav :class="navState">
       <div class="header">
         <h2>Following List</h2>
-        <input type="image" @click="fetchTweets()" src="./src/assets/close-l.svg" alt="close panel" />
+        <input type="image" @click="saveList()" src="./src/assets/close-l.svg" alt="close panel" />
       </div>
       <div class="divider" />
       <form @submit.prevent="addUser()">
@@ -76,6 +76,7 @@ export default {
       usernames: [],
       newUser: "",
       tweetData: "",
+      didUpdate: false,
       empty: false,
       loader: true,
       navState: "hidden"
@@ -103,10 +104,12 @@ export default {
       this.usernames.push(temp);
       localStorage.setItem("saved-users", JSON.stringify(this.usernames));
       this.newUser = "";
+      this.didUpdate = true;
     },
     removeUser: function(user) {
       this.usernames.splice(this.usernames.indexOf(user), 1);
       localStorage.setItem("saved-users", JSON.stringify(this.usernames));
+      this.didUpdate = true;
     },
     fetchTweets: function() {
       let userlist = "";
@@ -123,9 +126,16 @@ export default {
           .then(json => {
             vm.tweetData = json;
             vm.loader = false;
+            this.didUpdate = false;
             console.log("finished loading");
           });
       } else {
+      }
+    },
+    saveList: function() {
+      let vm = this;
+      if (this.didUpdate) {
+        vm.fetchTweets();
       }
       vm.navState = "hidden";
     }
