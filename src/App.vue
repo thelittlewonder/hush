@@ -83,7 +83,13 @@ export default {
     addUser: function(event) {
       let temp = {
         username: this.newUser,
-        id: Math.random().toString(36).substring(2, 4) + Math.random().toString(36).substring(2, 6)
+        id:
+          Math.random()
+            .toString(36)
+            .substring(2, 4) +
+          Math.random()
+            .toString(36)
+            .substring(2, 6)
       };
       this.usernames.push(temp);
       localStorage.setItem("saved-users", JSON.stringify(this.usernames));
@@ -152,6 +158,11 @@ body {
     }
     aside {
       max-width: 280px;
+      max-height: 250px;
+      overflow: auto;
+      position: -webkit-sticky;
+      position: sticky;
+      top: 48px;
     }
 
     nav {
@@ -205,7 +216,7 @@ aside {
       border-radius: 50%;
       top: -6px;
       left: 6px;
-      animation: blink 3s infinite;
+      animation: blink 2s infinite;
     }
     img {
       height: 24px;
