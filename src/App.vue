@@ -11,7 +11,7 @@
       <button class="primary" @click="navState='visible'">Edit List</button>
       <div class="divider" />
       <a href="https://twitter.com/lilwonderspeaks" target="_blank" rel="noreferrer noopener">
-        <img src="./assets/twitter.svg" />Contact
+        <img src="./assets/twitter.svg" alt="Twitter Link" />Contact
       </a>
     </aside>
     <!--sliding content-->
@@ -45,17 +45,25 @@
         </ul>
       </section>
     </nav>
-    <main v-if="!empty">
-      <article v-for="tweet in tweetData" :key="tweet.username">
-        <p>{{tweet.content}}</p>
-        <span class="info">
-          <span class="meta">@{{tweet.author}} • {{tweet.date}}</span>
-          <a :href="tweet.url" target="_blank" rel="noreferrer noopener">↗</a>
-        </span>
-        <div class="divider" />
-      </article>
+    <main>
+      <transition name="fade">
+        <section v-if="!loader" transition="expand">
+          <article v-for="tweet in tweetData" :key="tweet.username">
+            <p>{{tweet.content}}</p>
+            <span class="info">
+              <span class="meta">@{{tweet.author}} • {{tweet.date}}</span>
+              <a :href="tweet.url" target="_blank" rel="noreferrer noopener">↗</a>
+            </span>
+            <div class="divider" />
+          </article>
+        </section>
+      </transition>
+      <transition name="fade">
+        <div class="loader" v-if="loader" transition="expand">
+          <span class="ld-text"></span>
+        </div>
+      </transition>
     </main>
-    <!--main v-else>Please follow some people</main-->
   </div>
 </template>
 
@@ -69,6 +77,7 @@ export default {
       newUser: "",
       tweetData: "",
       empty: false,
+      loader: true,
       navState: "hidden"
     };
   },
@@ -102,6 +111,7 @@ export default {
     fetchTweets: function() {
       let userlist = "";
       let vm = this;
+      this.loader = true;
       for (let i in vm.usernames) {
         userlist = userlist + vm.usernames[i].username + ",";
       }
@@ -110,9 +120,12 @@ export default {
       if (userlist.length > 0) {
         fetch(reqUrl)
           .then(response => response.json())
-          .then(json => (vm.tweetData = json));
+          .then(json => {
+            vm.tweetData = json;
+            vm.loader = false;
+            console.log("finished loading");
+          });
       } else {
-        vm.empty = true;
       }
       vm.navState = "hidden";
     }
@@ -444,6 +457,35 @@ main {
     }
   }
 }
+
+.loader {
+  .ld-text {
+    font-size: 0.875em;
+    &::before {
+      content: "Fetching Tweets ";
+    }
+    &::after {
+      content: "\00a0\00a0\00a0";
+      animation: progress-ellipsis 3s infinite;
+    }
+  }
+}
+
+@keyframes progress-ellipsis {
+  0% {
+    content: "\00a0\00a0\00a0";
+  }
+  30% {
+    content: ".\00a0\00a0";
+  }
+  60% {
+    content: ". .\00a0";
+  }
+  90% {
+    content: ". . .";
+  }
+}
+
 @keyframes blink {
   0%,
   100% {
@@ -454,5 +496,14 @@ main {
   90% {
     transform: scale(1, 1);
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
