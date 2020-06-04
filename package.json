@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "register-service-worker": "^1.7.1",
+    "reset-css": "^5.0.1",
     "vue": "^2.5.11"
   },
   "devDependencies": {

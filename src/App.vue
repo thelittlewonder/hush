@@ -1,25 +1,66 @@
 <template>
   <div id="app">
     <aside>
-      <form @submit.prevent="addUser()">
-        <label for="username">Follow a user</label>
-        <input autofocus type="text" name="username" placeholder="naval" v-model="newUser" />
-        <button type="submit">Add</button>
-      </form>
-      <section>
-        <div v-for="user in usernames" :key="user.id">
-          <p>{{user.username}}</p>
-          <button @click="removeUser(user)">x</button>
-        </div>
-        <button @click="fetchTweets()">Save</button>
-      </section>
+      <!--fixed content-->
+      <picture>
+        <span class="eye"></span>
+        <img src="./assets/baselogo.svg" alt="Hush Logo" />
+      </picture>
+      <div class="divider" />
+      <h1>Follow tweets of your favourite people on internet, without any noise.</h1>
+      <button class="primary" @click="navState='visible'">Edit List</button>
+      <div class="divider" />
+      <a href="https://twitter.com/lilwonderspeaks" target="_blank" rel="noreferrer noopener">
+        <img src="./assets/twitter.svg" />Contact
+      </a>
     </aside>
-    <main v-if="!empty">{{tweetData}}</main>
-    <main v-else>Please follow some people</main>
+    <!--sliding content-->
+    <nav :class="navState">
+      <div class="header">
+        <h2>Following List</h2>
+        <input type="image" @click="fetchTweets()" src="./src/assets/close-l.svg" alt="close panel" />
+      </div>
+      <div class="divider" />
+      <form @submit.prevent="addUser()">
+        <label for="username">Enter Twitter username</label>
+        <span>
+          <input autofocus type="text" name="username" placeholder="naval" v-model="newUser" />
+          <button type="submit">→</button>
+        </span>
+      </form>
+
+      <section>
+        <ul>
+          <li v-for="user in usernames" :key="user.id">
+            <span>
+              <h3>{{user.username}}</h3>
+              <input
+                type="image"
+                src="./src/assets/close-s.svg"
+                alt="delete user from list"
+                @click="removeUser(user)"
+              />
+            </span>
+          </li>
+        </ul>
+      </section>
+    </nav>
+    <main v-if="!empty">
+      <article v-for="tweet in tweetData" :key="tweet.username">
+        <p>{{tweet.content}}</p>
+        <span class="info">
+          <span class="meta">@{{tweet.author}} • {{tweet.date}}</span>
+          <a :href="tweet.url" target="_blank" rel="noreferrer noopener">↗</a>
+        </span>
+        <div class="divider" />
+      </article>
+    </main>
+    <!--main v-else>Please follow some people</main-->
   </div>
 </template>
 
 <script>
+import "reset-css";
 export default {
   name: "app",
   data() {
@@ -27,23 +68,22 @@ export default {
       usernames: [],
       newUser: "",
       tweetData: "",
-      empty: false
+      empty: false,
+      navState: "hidden"
     };
   },
   mounted() {
     let vm = this;
     if (localStorage.getItem("saved-users").length > 2) {
       this.usernames = JSON.parse(localStorage.getItem("saved-users"));
-      vm.fetchTweets()
+      vm.fetchTweets();
     }
-
-    this.fetchTweets();
   },
   methods: {
     addUser: function(event) {
       let temp = {
         username: this.newUser,
-        id: this.usernames.length + 1
+        id: Math.random().toString(36).substring(2, 4) + Math.random().toString(36).substring(2, 6)
       };
       this.usernames.push(temp);
       localStorage.setItem("saved-users", JSON.stringify(this.usernames));
@@ -66,12 +106,341 @@ export default {
           .then(response => response.json())
           .then(json => (vm.tweetData = json));
       } else {
-        vm.empty = true
+        vm.empty = true;
       }
+      vm.navState = "hidden";
     }
   }
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: normal;
+  src: url("assets/fonts/JetBrainsMono-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 500;
+  src: url("assets/fonts/JetBrainsMono-Medium.woff2") format("woff2");
+}
+
+body {
+  background-color: #1e272e;
+  color: #d1c1a8;
+  font-family: "JetBrains Mono";
+}
+
+.divider {
+  height: 0px;
+  width: 20px;
+  opacity: 0.2;
+  border: 1px solid #d1c1a8;
+}
+
+@media all and (min-width: 800px) {
+  #app {
+    display: flex;
+    flex-direction: row;
+    padding: 48px 96px;
+    main {
+      margin-left: 120px;
+    }
+    aside {
+      max-width: 280px;
+    }
+
+    nav {
+      width: 375px;
+    }
+  }
+}
+
+@media all and (min-width: 500px) and (max-width: 799px) {
+  #app {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    padding: 48px;
+    main {
+      margin-top: 48px;
+    }
+    aside {
+      max-width: 280px;
+    }
+    nav {
+      width: 375px;
+    }
+  }
+}
+
+@media all and (max-width: 499px) {
+  #app {
+    display: flex;
+    flex-direction: column;
+    padding: 32px 24px;
+    main {
+      margin-top: 56px;
+    }
+    nav {
+      max-width: 100%;
+    }
+  }
+}
+
+/*aside*/
+
+aside {
+  picture {
+    position: relative;
+    .eye {
+      background-color: #222b33;
+      position: absolute;
+      height: 2.5px;
+      width: 2.5px;
+      border-radius: 50%;
+      top: -6px;
+      left: 6px;
+      animation: blink 3s infinite;
+    }
+    img {
+      height: 24px;
+    }
+  }
+  .divider {
+    margin: 1em 0;
+  }
+  h1 {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 0.75em;
+    line-height: 1.67em;
+    opacity: 0.85;
+    margin-bottom: 16px;
+  }
+  .primary {
+    padding: 6px 12px;
+    background: #d1c1a8;
+    border-radius: 1px;
+    font-family: "JetBrains Mono";
+    border: none;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 15px;
+    color: #222b33;
+    opacity: 0.85;
+    margin-bottom: 8px;
+    cursor: pointer;
+    &:focus {
+      outline: none;
+      border: none;
+    }
+  }
+  a {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 10px;
+    line-height: 12px;
+    color: #d1c1a8;
+    opacity: 0.5;
+    text-decoration: none;
+    transition: opacity 0.3s ease-in-out;
+    img {
+      margin-right: 8px;
+    }
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
+
+/*nav*/
+nav {
+  padding: 32px;
+  background: #192127;
+  position: fixed;
+  bottom: 0;
+  transition: left 0.75s ease-in-out;
+  height: calc(100% - 64px);
+  z-index: 999;
+  .header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    h2 {
+      font-weight: 500;
+      font-size: 1em;
+      line-height: 1.5em;
+    }
+    input {
+      height: 24px;
+      width: 24px;
+      transition: all 0.3s ease-in-out;
+      &:hover {
+        transform: scale(1.05);
+      }
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+  .divider {
+    margin-top: 12px;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    margin: 40px 0;
+    label {
+      font-style: normal;
+      font-weight: 500;
+      font-size: 0.875em;
+      line-height: 1.2em;
+      color: #d1c1a8;
+      opacity: 0.85;
+    }
+    span {
+      display: flex;
+      flex-direction: row;
+      margin-top: 12px;
+      input {
+        background: #28343e;
+        border-radius: 2px 0px 0px 2px;
+        padding: 7px 10px;
+        font-size: 0.75em;
+        font-family: "JetBrains Mono";
+        border: 1px solid #28343e;
+        color: #fff;
+        transition: all 0.3s ease-in-out;
+        &:focus {
+          border: 1px solid rgba(209, 193, 168, 0.8);
+          outline: none;
+          background: #192127;
+        }
+      }
+      button {
+        font-family: "JetBrains Mono";
+        font-size: 1em;
+        line-height: 1.5em;
+        padding: 0 16px;
+        color: #192127;
+        background: #d1c1a8;
+        border-radius: 0px 2px 2px 0px;
+        border: none;
+        cursor: pointer;
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+  }
+}
+
+/*Nav Bar States*/
+.hidden {
+  left: -435px;
+}
+
+.visible {
+  left: -0px;
+}
+
+section {
+  ul {
+    list-style-type: square;
+    margin-left: 1em;
+    li {
+      display: list-item;
+      padding: 12px 0;
+      span {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        &:hover > input {
+          opacity: 1;
+        }
+        h3 {
+          font-style: normal;
+          font-weight: normal;
+          font-size: 13px;
+          line-height: 16px;
+          letter-spacing: 0.01em;
+          color: #d1c1a8;
+          opacity: 0.85;
+        }
+        input {
+          height: 12px;
+          width: 12px;
+          padding: 4px;
+          opacity: 0;
+          transition: all 0.3s ease-in-out;
+          &:focus {
+            outline: none;
+          }
+          &:hover {
+            transform: scale(1.05);
+          }
+        }
+      }
+    }
+  }
+}
+
+main {
+  grid-column: 2 / span 2;
+  article {
+    max-width: 450px;
+    p {
+      font-weight: 500;
+      font-size: 0.875em;
+      line-height: 1.7em;
+      text-align: justify;
+      color: #d1c1a8;
+    }
+    .info {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      .meta {
+        font-style: normal;
+        font-weight: normal;
+        font-size: 11px;
+        color: #d1c1a8;
+        opacity: 0.75;
+      }
+      a {
+        font-style: normal;
+        font-weight: normal;
+        font-size: 11px;
+        color: #d1c1a8;
+        opacity: 0.75;
+        padding: 4px;
+        text-decoration: none;
+      }
+    }
+    .divider {
+      opacity: 0.2;
+      border: 1px solid #d1c1a8;
+      width: 20px;
+      margin: 40px 0;
+    }
+  }
+}
+@keyframes blink {
+  0%,
+  100% {
+    transform: scale(1, 0.05);
+  }
+
+  5%,
+  95% {
+    transform: scale(1, 1);
+  }
+}
 </style>
