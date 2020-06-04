@@ -47,7 +47,7 @@
     </nav>
     <main>
       <transition name="fade">
-        <section v-if="!loader">
+        <section v-if="!loader && !empty">
           <article v-for="tweet in tweetData" :key="tweet.username">
             <p>{{tweet.content}}</p>
             <span class="info">
