@@ -216,7 +216,7 @@ aside {
       border-radius: 50%;
       top: -6px;
       left: 6px;
-      animation: blink 2s infinite;
+      animation: blink 3s infinite;
     }
     img {
       height: 24px;
@@ -274,6 +274,7 @@ aside {
 nav {
   padding: 32px;
   background: #192127;
+  overflow: scroll;
   position: fixed;
   bottom: 0;
   transition: left 0.75s ease-in-out;
@@ -446,11 +447,11 @@ main {
 @keyframes blink {
   0%,
   100% {
-    transform: scale(1, 0.05);
+    transform: scale(1, 0.02);
   }
 
-  5%,
-  95% {
+  10%,
+  90% {
     transform: scale(1, 1);
   }
 }
