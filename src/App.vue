@@ -18,7 +18,8 @@
     <nav :class="navState">
       <div class="header">
         <h2>Following List</h2>
-        <input type="image" @click="saveList()" src="./src/assets/close-l.svg" alt="close panel" />
+        <label for="save"></label>
+        <input type="image" @click="saveList()" src="./src/assets/close-l.svg" alt="close panel" name="save"/>
       </div>
       <div class="divider" />
       <form @submit.prevent="addUser()">
@@ -34,10 +35,12 @@
           <li v-for="user in usernames" :key="user.id">
             <span>
               <h3>{{user.username}}</h3>
+              <label for="close"></label>
               <input
                 type="image"
                 src="./src/assets/close-s.svg"
                 alt="delete user from list"
+                name="close"
                 @click="removeUser(user)"
               />
             </span>
@@ -85,7 +88,7 @@ export default {
       usernames: [
         {
           id: "001",
-          username: "naval"
+          username: "shaneaparrish"
         },
         {
           id: "002",
@@ -153,7 +156,6 @@ export default {
             vm.tweetData = json;
             vm.loader = false;
             this.didUpdate = false;
-            console.log("finished loading");
           });
       }
     },
@@ -179,6 +181,7 @@ export default {
   font-family: "JetBrains Mono";
   font-style: normal;
   font-weight: normal;
+  font-display: swap;
   src: url("assets/fonts/JetBrainsMono-Regular.woff2") format("woff2");
 }
 
@@ -186,6 +189,7 @@ export default {
   font-family: "JetBrains Mono";
   font-style: normal;
   font-weight: 500;
+  font-display: swap;
   src: url("assets/fonts/JetBrainsMono-Medium.woff2") format("woff2");
 }
 
