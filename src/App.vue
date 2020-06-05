@@ -25,7 +25,7 @@
       <form @submit.prevent="addUser()">
         <label for="username">Enter Twitter username</label>
         <span>
-          <input autofocus type="text" name="username" placeholder="eg. naval" v-model="newUser" />
+          <input autofocus type="text" id="username" placeholder="eg. naval" v-model="newUser" />
           <button type="submit">→</button>
         </span>
       </form>
