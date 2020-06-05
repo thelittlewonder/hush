@@ -19,7 +19,13 @@
       <div class="header">
         <h2>Following List</h2>
         <label for="save"></label>
-        <input type="image" @click="saveList()" src="./src/assets/close-l.svg" alt="close panel" id="save"/>
+        <input
+          type="image"
+          @click="saveList()"
+          src="./src/assets/close-l.svg"
+          alt="close panel"
+          id="save"
+        />
       </div>
       <div class="divider" />
       <form @submit.prevent="addUser()">
@@ -47,6 +53,7 @@
           </li>
         </ul>
       </section>
+      <p>Changes to this list are saved locally so that you can create a personalised list for yourself.</p>
     </nav>
     <main>
       <transition name="fade">
@@ -330,6 +337,8 @@ aside {
 
 /*nav*/
 nav {
+  display: flex;
+  flex-direction: column;
   padding: 32px;
   background: #192127;
   overflow: scroll;
@@ -361,6 +370,15 @@ nav {
   }
   .divider {
     margin-top: 12px;
+  }
+  p {
+    margin-top: auto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 10px;
+    line-height: 20px;
+    color: #d1c1a8;
+    opacity: 0.5;
   }
   form {
     display: flex;
