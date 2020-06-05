@@ -1,0 +1,19 @@
+{
+  "name": "Hush",
+  "short_name": "Hush",
+  "description": "Follow tweets of your favourite people on internet without any noise.",
+  "icons": [{
+      "src": "./icons/android-chrome-192x192.png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "./icons/android-chrome-512x512.png",
+      "sizes": "512x512"
+    }
+  ],
+  "display": "standalone",
+  "start_url": "/?source=pwa",
+  "background_color": "#1e272e",
+  "scope": "/",
+  "theme_color": "#1e272e"
+}
