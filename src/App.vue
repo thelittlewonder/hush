@@ -431,7 +431,7 @@ nav {
 
 /*Nav Bar States*/
 .hidden {
-  left: -435px;
+  left: -500px;
 }
 
 .visible {
