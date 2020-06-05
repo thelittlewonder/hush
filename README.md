@@ -1,8 +1,10 @@
-# hush
+# Hush
 
-> A Vue.js project
+Create your own feed to consume tweets from your favourite people on internet without any noise. No authentication required. All the data is stored locally on your machine. 
 
-## Build Setup
+Check it out at https://hush.onrender.com/
+
+## Local Setup
 
 ``` bash
 # install dependencies
@@ -14,5 +16,3 @@ npm run dev
 # build for production with minification
 npm run build
 ```
-
-For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
