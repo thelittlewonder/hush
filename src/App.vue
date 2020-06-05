@@ -38,7 +38,7 @@
               <label for="close"></label>
               <input
                 type="image"
-                src="./src/assets/close-s.svg"
+                src="./src/assets/remove.svg"
                 alt="delete user from list"
                 id="close"
                 @click="removeUser(user)"
@@ -426,7 +426,7 @@ section {
     margin-left: 1em;
     li {
       display: list-item;
-      padding: 12px 0;
+      padding: 10px 0;
       span {
         display: flex;
         align-items: center;
@@ -442,10 +442,11 @@ section {
           letter-spacing: 0.01em;
           color: #d1c1a8;
           opacity: 0.85;
+          cursor: default;
         }
         input {
-          height: 12px;
-          width: 12px;
+          height: 20px;
+          width: 20px;
           padding: 4px;
           opacity: 0;
           transition: all 0.3s ease-in-out;
