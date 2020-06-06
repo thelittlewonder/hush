@@ -4,6 +4,8 @@ Create a local feed to consume tweets of your favourite people on internet witho
 
 Check it out at https://hush.onrender.com/
 
+> Built using [Twint](https://github.com/twintproject/twint)
+
 ## Local Setup
 
 ``` bash
