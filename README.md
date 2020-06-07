@@ -1,8 +1,10 @@
 # Hush
 
-Create a local feed to consume tweets from your favourite people on internet without any noise. No authentication required. All the data is stored locally on your machine. 
+Create a local feed to consume tweets of your favourite people on internet without any noise. No authentication required. All the data is stored locally on your machine. 
 
 Check it out at https://hush.onrender.com/
+
+> Built using [Twint](https://github.com/twintproject/twint)
 
 ## Local Setup
 
