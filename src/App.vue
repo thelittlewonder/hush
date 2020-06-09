@@ -10,9 +10,15 @@
       <h1>Follow tweets of your favourite people on internet without any noise.</h1>
       <button class="primary" @click="navState='visible'">Edit List</button>
       <div class="divider" />
-      <a href="https://twitter.com/lilwonderspeaks" target="_blank" rel="noreferrer noopener">
-        <img src="./assets/twitter.svg" alt="Twitter Link" />Contact
-      </a>
+      <span>
+        <a href="https://twitter.com/lilwonderspeaks" target="_blank" rel="noreferrer noopener">
+          <img src="./assets/twitter.svg" alt="Twitter Link" />Contact
+        </a>&nbsp;<a
+          href="https://github.com/thelittlewonder/hush"
+          target="_blank"
+          rel="noreferrer noopener"
+        >GitHub</a>
+      </span>
     </aside>
     <!--sliding content-->
     <nav :class="navState">
@@ -31,7 +37,14 @@
       <form @submit.prevent="addUser()">
         <label for="username">Enter Twitter username</label>
         <span>
-          <input required autofocus type="text" id="username" placeholder="eg. naval" v-model="newUser" />
+          <input
+            required
+            autofocus
+            type="text"
+            id="username"
+            placeholder="eg. naval"
+            v-model="newUser"
+          />
           <button type="submit">→</button>
         </span>
       </form>
@@ -327,7 +340,7 @@ aside {
     text-decoration: none;
     transition: opacity 0.3s ease-in-out;
     img {
-      margin-right: 8px;
+      margin-right: 6px;
     }
     &:hover {
       opacity: 0.8;
