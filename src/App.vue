@@ -488,6 +488,11 @@ section {
             transform: scale(1.05);
           }
         }
+        @media (hover: none) {
+          input{
+            opacity: 1;
+          }
+        }
       }
     }
   }
