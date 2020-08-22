@@ -168,7 +168,7 @@ export default {
         userlist = userlist + vm.usernames[i].username + ",";
       }
       userlist = userlist.slice(0, -1);
-      let reqUrl = "https://hashapi.herokuapp.com/tweets?u=" + userlist;
+      let reqUrl = "https://hshapi.herokuapp.com/tweets?u=" + userlist;
       if (userlist.length > 0) {
         fetch(reqUrl)
           .then(response => response.json())
