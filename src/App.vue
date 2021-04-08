@@ -479,7 +479,7 @@ nav {
   p{
     font-size: 0.8em;
     margin-top: 1em;
-    opacity: 60%;
+    opacity: 0.6;
   }
 }
 
