@@ -7,17 +7,24 @@
         <img src="./assets/baselogo.svg" alt="Hush Logo" />
       </picture>
       <div class="divider" />
-      <h1>Follow tweets of your favourite people on internet without any noise.</h1>
-      <button class="primary" @click="navState='visible'">Edit List</button>
+      <h1>
+        Follow tweets of your favourite people on internet without any noise.
+      </h1>
+      <button class="primary" @click="navState = 'visible'">Edit List</button>
       <div class="divider" />
       <span>
-        <a href="https://twitter.com/lilwonderspeaks" target="_blank" rel="noreferrer noopener">
-          <img src="./assets/twitter.svg" alt="Twitter Link" />Contact
-        </a>&nbsp;<a
+        <a
+          href="https://twitter.com/lilwonderspeaks"
+          target="_blank"
+          rel="noreferrer noopener"
+        >
+          <img src="./assets/twitter.svg" alt="Twitter Link" />Contact </a
+        >&nbsp;<a
           href="https://github.com/thelittlewonder/hush"
           target="_blank"
           rel="noreferrer noopener"
-        >GitHub</a>
+          >GitHub</a
+        >
       </span>
     </aside>
     <!--sliding content-->
@@ -53,7 +60,7 @@
         <ul>
           <li v-for="user in usernames" :key="user.id">
             <span>
-              <h3>{{user.username}}</h3>
+              <h3>{{ user.username }}</h3>
               <label for="close"></label>
               <input
                 type="image"
@@ -66,16 +73,21 @@
           </li>
         </ul>
       </section>
-      <p>Changes to this list are saved locally so that you can create a personalised list for yourself.</p>
+      <p>
+        Changes to this list are saved locally so that you can create a
+        personalised list for yourself.
+      </p>
     </nav>
     <main>
       <transition name="fade">
         <section v-if="!loader && !empty">
           <article v-for="tweet in tweetData" :key="tweet.username">
-            <p>{{tweet.content}}</p>
+            <p>{{ tweet.content }}</p>
             <span class="info">
-              <span class="meta">@{{tweet.author}} • {{tweet.date}}</span>
-              <a :href="tweet.url" target="_blank" rel="noreferrer noopener">↗</a>
+              <span class="meta">@{{ tweet.author }} • {{ tweet.date }}</span>
+              <a :href="tweet.url" target="_blank" rel="noreferrer noopener"
+                >↗</a
+              >
             </span>
             <div class="divider" />
           </article>
@@ -86,8 +98,15 @@
           <h3>You are not following anyone.</h3>
           <p>
             Please
-            <span @click="navState='visible'">follow some people</span> to generate your feed
+            <span @click="navState = 'visible'">follow some people</span> to
+            generate your feed
           </p>
+        </div>
+      </transition>
+      <transition name="fade">
+        <div class="errorMessage" v-if="errorState">
+          <h2>Unable to load tweets ._. </h2>
+          <p>Seems like we are unable to reach Twitter. Please try again later.</p>
         </div>
       </transition>
       <transition name="fade">
@@ -108,23 +127,24 @@ export default {
       usernames: [
         {
           id: "001",
-          username: "shaneaparrish"
+          username: "shaneaparrish",
         },
         {
           id: "002",
-          username: "jamesclear"
+          username: "jamesclear",
         },
         {
           id: "003",
-          username: "orangebook_"
-        }
+          username: "orangebook_",
+        },
       ],
       newUser: "",
       tweetData: "",
       didUpdate: false,
       empty: false,
       loader: true,
-      navState: "hidden"
+      navState: "hidden",
+      errorState: false,
     };
   },
   mounted() {
@@ -139,28 +159,24 @@ export default {
     vm.fetchTweets();
   },
   methods: {
-    addUser: function(event) {
+    addUser: function (event) {
       let temp = {
         username: this.newUser,
         id:
-          Math.random()
-            .toString(36)
-            .substring(2, 4) +
-          Math.random()
-            .toString(36)
-            .substring(2, 6)
+          Math.random().toString(36).substring(2, 4) +
+          Math.random().toString(36).substring(2, 6),
       };
       this.usernames.push(temp);
       localStorage.setItem("saved-users", JSON.stringify(this.usernames));
       this.newUser = "";
       this.didUpdate = true;
     },
-    removeUser: function(user) {
+    removeUser: function (user) {
       this.usernames.splice(this.usernames.indexOf(user), 1);
       localStorage.setItem("saved-users", JSON.stringify(this.usernames));
       this.didUpdate = true;
     },
-    fetchTweets: function() {
+    fetchTweets: function () {
       let userlist = "";
       let vm = this;
       this.loader = true;
@@ -171,15 +187,19 @@ export default {
       let reqUrl = "https://hshapi.herokuapp.com/tweets?u=" + userlist;
       if (userlist.length > 0) {
         fetch(reqUrl)
-          .then(response => response.json())
-          .then(json => {
+          .then((response) => response.json())
+          .then((json) => {
             vm.tweetData = json;
             vm.loader = false;
             this.didUpdate = false;
+          })
+          .catch(function () {
+            vm.errorState = true;
+            vm.loader = false;
           });
       }
     },
-    saveList: function() {
+    saveList: function () {
       let vm = this;
       if (this.didUpdate) {
         if (localStorage.getItem("saved-users").length > 2) {
@@ -191,8 +211,8 @@ export default {
         }
       }
       vm.navState = "hidden";
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -451,6 +471,18 @@ nav {
   left: -0px;
 }
 
+.errorMessage{
+  h2{
+    font-size: 1em;
+    text-align: center;
+  }
+  p{
+    font-size: 0.8em;
+    margin-top: 1em;
+    opacity: 60%;
+  }
+}
+
 section {
   ul {
     list-style-type: square;
@@ -489,7 +521,7 @@ section {
           }
         }
         @media (hover: none) {
-          input{
+          input {
             opacity: 1;
           }
         }
